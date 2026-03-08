@@ -1,0 +1,15 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "Add-Type": true,
+        "new-object": true,
+        "/^python -c \"import openpyxl; wb = openpyxl\\.load_workbook\\(r'C:\\\\Users\\\\arman\\\\Downloads\\\\2025 Master Property Spreadsheet_fixed\\.xlsx', data_only=True\\); ws = wb\\['SUMMARY'\\]; print\\(\\[ws\\.cell\\(row=1, column=j\\)\\.value for j in range\\(1, 15\\)\\]\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "C:\\repos\\download_report.ps1": true,
+        "/^python -c \"import openpyxl; wb = openpyxl\\.load_workbook\\(r'C:\\\\repos\\\\PropertyManagement_2025_AllProperties\\.xlsx', data_only=True\\); print\\(wb\\.sheetnames\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
