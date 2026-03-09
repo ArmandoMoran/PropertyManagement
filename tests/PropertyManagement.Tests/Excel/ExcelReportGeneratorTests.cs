@@ -49,7 +49,7 @@ public class ExcelReportGeneratorTests
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
 
-        Assert.Equal(3, wb.Worksheets.Count);
+        Assert.Equal(3, wb.Worksheets.Count(w => w.Name != "SUMMARY"));
         Assert.Contains(wb.Worksheets, ws => ws.Name == "Property A");
         Assert.Contains(wb.Worksheets, ws => ws.Name == "Property B");
         Assert.Contains(wb.Worksheets, ws => ws.Name == "Property C");
@@ -65,7 +65,7 @@ public class ExcelReportGeneratorTests
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
 
-        Assert.Equal(31, wb.Worksheets.First().Name.Length);
+        Assert.Equal(31, wb.Worksheets.First(w => w.Name != "SUMMARY").Name.Length);
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         Assert.Equal("Rental Profit & Loss - 2025", ws.Cell(1, 1).GetString());
     }
@@ -89,7 +89,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         Assert.Equal("Income", ws.Cell(6, 1).GetString());
         Assert.Equal("Jan", ws.Cell(6, 2).GetString());
@@ -108,7 +108,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         Assert.Equal("Rent", ws.Cell(7, 1).GetString());
         Assert.Equal(1500, ws.Cell(7, 2).GetDouble());
@@ -127,7 +127,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         Assert.Equal("Total Income", ws.Cell(12, 1).GetString());
         Assert.Equal(1550, ws.Cell(12, 2).GetDouble()); // Jan: 1500 + 50
@@ -154,7 +154,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Row 14 should have HVAC
         Assert.Equal("HVAC", ws.Cell(14, 1).GetString());
@@ -175,7 +175,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         Assert.Equal("Management Fee", ws.Cell(15, 1).GetString());
         Assert.Equal(142.80, ws.Cell(15, 2).GetDouble());
@@ -192,7 +192,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         Assert.Equal("LENDER: Chase Bank", ws.Cell(1, 8).GetString());
         Assert.Equal("Monthly: $1,500.00", ws.Cell(2, 8).GetString());
@@ -210,7 +210,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         Assert.Equal("HOA: Sunrise HOA", ws.Cell(1, 10).GetString());
         Assert.Equal("Quarterly: $75.00", ws.Cell(2, 10).GetString());
@@ -237,7 +237,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Find the Total Expenses row
         int totalExpenseRow = -1;
@@ -268,7 +268,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Find the NOI row
         int noiRow = -1;
@@ -310,7 +310,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Row 7 (Rent) - zero cells should be empty
         Assert.True(ws.Cell(7, 2).IsEmpty());
@@ -328,7 +328,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Find the Net Income row
         int netIncomeRow = -1;
@@ -357,7 +357,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Find Principal Payment row
         int principalRow = -1;
@@ -390,7 +390,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Repair lines start at row 22, should be sorted alphabetically
         Assert.Equal("  Appliance Repairs", ws.Cell(22, 1).GetString());
@@ -413,7 +413,7 @@ public class ExcelReportGeneratorTests
         var bytes = await _sut.GenerateWorkbookAsync(reports, 2025);
         using var ms = new MemoryStream(bytes);
         using var wb = new XLWorkbook(ms);
-        var ws = wb.Worksheets.First();
+        var ws = wb.Worksheets.First(w => w.Name != "SUMMARY");
 
         // Find Capital Expenses header
         int capExpRow = -1;

@@ -319,12 +319,12 @@ public class ExcelReportGenerator : IExcelReportGenerator
         ws.Cell(row, 1).Style.Fill.BackgroundColor = XLColor.PaleGreen;
         for (int m = 0; m < 12; m++)
         {
-            decimal total = report.Rent[m] + report.PetFees[m] + report.OtherIncome[m];
-            ws.Cell(row, m + 2).Value = total;
+            var colLetter = ws.Cell(row, m + 2).WorksheetColumn().ColumnLetter();
+            ws.Cell(row, m + 2).FormulaA1 = $"=SUM({colLetter}7:{colLetter}10)";
             ws.Cell(row, m + 2).Style.NumberFormat.Format = "#,##0.00";
             ws.Cell(row, m + 2).Style.Fill.BackgroundColor = XLColor.PaleGreen;
         }
-        ws.Cell(row, 14).Value = report.TotalIncome;
+        ws.Cell(row, 14).FormulaA1 = "=SUM(B12:M12)";
         ws.Cell(row, 14).Style.NumberFormat.Format = "#,##0.00";
         ws.Cell(row, 14).Style.Font.Bold = true;
         ws.Cell(row, 14).Style.Fill.BackgroundColor = XLColor.PaleGreen;
@@ -404,6 +404,7 @@ public class ExcelReportGenerator : IExcelReportGenerator
         ws.Cell(row, 1).Style.Font.Italic = true;
 
         // === ROWS 22+: Dynamic repair lines ===
+        row++;
         rowMap["RepairsStart"] = row;
         if (report.TenantChargeForRepair.Any(v => v != 0))
         {
@@ -456,11 +457,12 @@ public class ExcelReportGenerator : IExcelReportGenerator
         decimal[] monthlyExpenses = CalculateMonthlyExpenses(report);
         for (int m = 0; m < 12; m++)
         {
-            ws.Cell(row, m + 2).Value = monthlyExpenses[m];
+            var colLetter = ws.Cell(row, m + 2).WorksheetColumn().ColumnLetter();
+            ws.Cell(row, m + 2).FormulaA1 = $"=SUM({colLetter}14:{colLetter}{row - 1})";
             ws.Cell(row, m + 2).Style.NumberFormat.Format = "#,##0.00";
             ws.Cell(row, m + 2).Style.Fill.BackgroundColor = XLColor.LightCoral;
         }
-        ws.Cell(row, 14).Value = report.TotalExpenses;
+        ws.Cell(row, 14).FormulaA1 = $"=SUM(B{row}:M{row})";
         ws.Cell(row, 14).Style.NumberFormat.Format = "#,##0.00";
         ws.Cell(row, 14).Style.Font.Bold = true;
         ws.Cell(row, 14).Style.Fill.BackgroundColor = XLColor.LightCoral;
@@ -599,7 +601,7 @@ public class ExcelReportGenerator : IExcelReportGenerator
         decimal total = values.Sum();
         if (total != 0)
         {
-            ws.Cell(row, 14).Value = total;
+            ws.Cell(row, 14).FormulaA1 = $"=SUM(B{row}:M{row})";
             ws.Cell(row, 14).Style.NumberFormat.Format = "#,##0.00";
             ws.Cell(row, 14).Style.Font.Bold = true;
         }

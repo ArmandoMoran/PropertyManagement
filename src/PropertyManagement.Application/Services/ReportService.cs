@@ -167,11 +167,11 @@ public class ReportService : IReportService
                 switch (subCategory)
                 {
                     case "Leasing Commissions":
-                        report.LeasingCommissions[monthIndex] += absAmount;
+                        report.LeasingCommissions[monthIndex] += -signedAmount;
                         break;
                     case "Property Management":
                     default:
-                        report.ManagementFee[monthIndex] += absAmount;
+                        report.ManagementFee[monthIndex] += -signedAmount;
                         break;
                 }
                 break;
